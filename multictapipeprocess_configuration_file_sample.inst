@@ -1,0 +1,53 @@
+# Information from working machine.
+# Include trailing /
+input_dir=/home/vhep/mescob11/simtel_files/gamma/single_run_for_examples/              
+output_dir=/home/vhep/mescob11/sct-ctapipe-cleaning-analysis_dev/ctapipe_ouput/               
+n_cores=12
+merge_h5_files=True
+
+# Start reading from here.
+
+
+# ctapipe parameters
+# User information
+YourName Miguel-Escobar                     # Seperate names with a dash ie Maria-Smith
+YourEmail mescob11@ucsc.edu
+YourInstitution UCSC
+
+
+# ctapipe I/O parameters
+FocalLengthChoice 'EQUIVALENT'              # Need to specify this flag for prod3b
+
+# Level of information included in logs 
+# Choices: any of [0, 10, 20, 30, 40, 50, 'DEBUG', 'INFO', 'WARN', 'ERROR', 'CRITICAL']
+LogFileLevel 'INFO' 
+LogLevel 30
+
+# Charge extraction - keep '' in name
+#'FullWaveformSum', 'FixedWindowSum', 
+#'GlobalPeakWindowSum','LocalPeakWindowSum', 
+#'SlidingWindowMaxSum', 'NeighborPeakWindowSum',
+#'TwoPassWindowSum', 'BaselineSubtractedNeighborPeakWindowSum'
+ChargeExtraction 'NeighborPeakWindowSum'
+
+
+# Image cleaner selects pixels which have signal in them and rejects those without
+UseTelescopeFrame True
+# Cleaning algorithm choices are: 
+# TailcutsImageCleaner, MARSImageCleaner, FACTImageCleaner
+CleaningMethod FACTImageCleaner
+image_pe 2.5
+neighbor_pe 1.5
+delta_time 5.0
+
+# Reconstructor - NOT YET IMPLEMENTED
+# 'DispReconstructor', 'HillasIntersection', 
+# 'HillasReconstructor', 'EnergyRegressor', 
+# 'ParticleClassifier'
+
+
+# Image Quality Criteria                      
+KeepIsolatedPixels False                    # If False, pixels with < min_pic_neighbors are removed.
+MinimumPictureNeighbors 1                   # Minimum number of neighbor pixels above neighbor pe cut to consider.
+MinimumPixelsInImage 3                      # Minimum # of pixels in image required to be considered for analysis.
+MinimumImageSize 3                          # Minimum total charge [pe] in image required to be considered for analysis.

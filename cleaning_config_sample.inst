@@ -1,0 +1,4 @@
+cleaning_method="FACTImageCleaner"                 
+image_pe_values=(2.5)           # Image pixels photoelectron cut [pe]
+neighbor_pe_values=(1.5)        # Neighbor pixels photoelectron cut [pe]
+delta_t_values=(1.0)            # Time difference between neigbors [ns]
