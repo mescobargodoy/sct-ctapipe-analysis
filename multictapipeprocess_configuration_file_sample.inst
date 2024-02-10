@@ -33,6 +33,7 @@ ChargeExtraction 'NeighborPeakWindowSum'
 
 # Image cleaner selects pixels which have signal in them and rejects those without
 UseTelescopeFrame True
+TelescopeType SCT
 # Cleaning algorithm choices are: 
 # TailcutsImageCleaner, MARSImageCleaner, FACTImageCleaner
 CleaningMethod FACTImageCleaner

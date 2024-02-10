@@ -88,13 +88,13 @@ ImageProcessor:
     #  - [type, "MST*NectarCam", 9.0]
     #  - [type, "MST*FlashCam", 9.0]
     #  - [type, "SST_ASTRI_CHEC", 4.0]
-      - [type, "*", image_pe]   
+      - [type, "TelescopeType", image_pe]   
     boundary_threshold_pe: # second-level threshold in photoelectrons
     #  - [type, "LST*", 4.25]
     #  - [type, "MST*NectarCam", 4.5]
     #  - [type, "MST*FlashCam", 4.5]
     #  - [type, "SST_ASTRI_CHEC", 2.0]
-      - [type,"*", neighbor_pe]
+      - [type,"TelescopeType", neighbor_pe]
     keep_isolated_pixels: KeepIsolatedPixels # If False, pixels with  < min_picture_neighbors are removed.
     min_picture_neighbors: MinimumPictureNeighbors # Minimum number of neighbors above threshold to consider
 
