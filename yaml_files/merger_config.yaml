@@ -1,0 +1,35 @@
+# ==========================================================================
+# ctapipe-process configuration file.
+# version: 0.19.2
+#
+# This configuration contains a subset of options needed for a basic analysis.
+# Not all possible options are shown. To get a complete list, run:
+#
+#     `ctapipe-merge --help-all`
+#
+# ==========================================================================
+
+MergeTool:
+
+  overwrite: OverWriteExistingMergerFile # do not overwrite existing files
+  skip_broken_files: SkipBrokenFiles
+  log_file_level: Merge_Log_File_Level
+  log_level: Merge_Log_Level
+
+HDF5Merger:
+  append: AppendtoExistingFile    
+  dl1_images: IncludeDL1Images
+  dl1_muon: IncludeDL1Muon
+  dl1_parameters: IncludeHillasParams
+  dl2_subarray: IncludeDL2SubarrayEventWiseData
+  dl2_telescope: IncludeDl2TelescopeEventWiseData 
+  monitoring: IncludeMonitoringData 
+  processing_statistics: IncludeProcessingStatistics
+  simulation: IncludeDatawithSimulationOnly 
+  telescope_events: IncludeTelescopeWiseData
+  true_images: IncludeTrueImages
+  true_parameters: IncludeTrueParameters
+#   overwrite: False
+#       If true, the ``output_path`` is overwritten in case it exists. See also
+#       ``append``
+#       Default: False

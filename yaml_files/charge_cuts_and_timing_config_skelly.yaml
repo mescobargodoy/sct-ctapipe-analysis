@@ -8,25 +8,24 @@
 #     `ctapipe-process --help-all`
 #
 # ==========================================================================
+Contact:  
+  # please fill in your contact information here. It will be stored in the
+  # output files as provenance information
+  name: YourName
+  email: YourEmail
+  organization: YourInstitution
 
 DataWriter:
-  Contact:
-    # please fill in your contact information here. It will be stored in the
-    # output files as provenance information
-    name: YourName
-    email: YourEmail
-    organization: YourInstitution
-
   # options that control what is stored in the output file by default here we
   # write nothing (can be overridden on the command-line or in subsequent config
   # files)
-  overwrite: false # do not overwrite existing files
-  write_images: false # store DL1 images
-  write_parameters: True # store DL1 parameters
-  write_showers: True # store DL2 stereo geometry
-  write_raw_waveforms: false # write R0 waveforms
-  write_waveforms: false # write R1 waveforms
-  write_muon_parameters: false # analyze and write muon parameters
+  overwrite: OverWriteExistingFile # do not overwrite existing files
+  write_images: WriteDL1Images # store DL1 images
+  write_parameters: WriteDL1Parameters # store DL1 parameters
+  write_showers: WriteDL2StereoReco # store DL2 stereo geometry
+  write_raw_waveforms: WriteRawWaveforms # write R0 waveforms
+  write_waveforms: WriteCalibratedWaveforms # write R1 waveforms
+  write_muon_parameters: WriteMuonParameters # analyze and write muon parameters
 
 # options that specify the amount of information stored in log file.
 Tool:
@@ -48,8 +47,17 @@ CameraCalibrator:
   # Note this is a telescope-wise parameter, so can be specified per telescope
   # if necessary (see below for an example)
   image_extractor_type:
-    - ['type', '*', ChargeExtraction]
+    - ['type', 'TelescopeType', ChargeExtraction]
   #  - ['type', '*FlashCam', 'FlashCamExtractor']
+  
+  # ChargeExtraction:
+    
+  #   window_width:
+  #   - ['type', 'TelescopeType', WaveformIntegrationWindowWidth]
+  #   # peak_index:
+  #   # - ['type', 'TelescopeType', SamplewithWaveformMax]
+  #   window_shift:
+  #   - ['type', 'TelescopeType', WaveformMaxShift]
 
 # The ImageProcessor performs the DL1a-> DL1b (image parameters) transition. It
 # is run only if the parameters `DataWriter.write_image_parameters=True` and the
@@ -121,10 +129,10 @@ ShowerProcessor:
   # choose between HillasReconstructor and HillasIntersection or both (two
   # implementations of the standard stereo line-intersection method)
   reconstructor_types:
-    - HillasReconstructor
+    - StereoGeometryReconstructor
       #  - HillasIntersection
 
-  #HillasReconstructor:
+  #StereoGeometryReconstructor:
     # Choose which telescope events should be included in the reconstruction.
     #StereoQualityQuery:
       # the quality criteria here should again be a list of [name,
@@ -132,30 +140,31 @@ ShowerProcessor:
       # `parameters` which is a `ctapipe.containers.ImageParametersContainer`
       # for the current event
       #quality_criteria:
-      #  - [enough intensity, "parameters.hillas.intensity > 5"]
-      #  - [Positive width, "parameters.hillas.width.value > 0"]
-      #  - [enough pixels, "parameters.morphology.n_pixels > 3"]
+      #  - [enough intensity, "parameters.hillas.intensity > HillasSize"]
+      #  - [Positive width, "parameters.hillas.width.value > HillasWidth"]
+      #  - [enough pixels, "parameters.morphology.n_pixels > HillasMininumPixelsInImage"]
+      #  - [centroid to center of camera distance [deg], "parameters.hillas.r.value < HillasDistance"]
       #  - [not clipped, "parameters.leakage.intensity_width_2 < 0.5"]
 
 # The MuonProcessor analyses DL1 images for muons and writes muon parameters.
 # It is only run if DataWriter.write_muon_parameters=True.
-MuonProcessor:
-  # Choose which events should be considered for muon analysis
-  ImageParameterQuery:
-    # quality critieria should be a list of pairs of [name, filter_expression]
-    # The filter expression should contain the variable `dl1_params` which are the
-    # image parameters.
-    quality_criteria:
-      - ["min_pixels", "dl1_params.morphology.n_pixels > 100"]
-      - ["min_intensity", "dl1_params.hillas.intensity > 500"]
+# MuonProcessor:
+#   # Choose which events should be considered for muon analysis
+#   ImageParameterQuery:
+#     # quality critieria should be a list of pairs of [name, filter_expression]
+#     # The filter expression should contain the variable `dl1_params` which are the
+#     # image parameters.
+#     quality_criteria:
+#       - ["min_pixels", "dl1_params.morphology.n_pixels > 100"]
+#       - ["min_intensity", "dl1_params.hillas.intensity > 500"]
 
-  # Choose which rings should be processed to the actual muon parameters
-  RingQuery:
-    # quality critieria should be a list of pairs of [name, filter_expression]
-    # The filter expression can either contain the variable `parameters` 
-    # (muon ring parameters like containment), `ring` (muon ring position and radius) 
-    # or `mask` (pixel mask masking the rings pixels)
-    quality_criteria:
-      - ["radius_not_nan", "np.isfinite(ring.radius.value)"]
-      - ["min_pixels", "np.count_nonzero(mask) > 50"]
-      - ["ring_containment", "parameters.containment > 0.5"]
+#   # Choose which rings should be processed to the actual muon parameters
+#   RingQuery:
+#     # quality critieria should be a list of pairs of [name, filter_expression]
+#     # The filter expression can either contain the variable `parameters` 
+#     # (muon ring parameters like containment), `ring` (muon ring position and radius) 
+#     # or `mask` (pixel mask masking the rings pixels)
+#     quality_criteria:
+#       - ["radius_not_nan", "np.isfinite(ring.radius.value)"]
+#       - ["min_pixels", "np.count_nonzero(mask) > 50"]
+#       - ["ring_containment", "parameters.containment > 0.5"]

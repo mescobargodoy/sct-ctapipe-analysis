@@ -1,54 +1,83 @@
 # Information from working machine.
-# Include trailing /
-input_dir=/home/vhep/mescob11/simtel_files/gamma/single_run_for_examples/              
-output_dir=/home/vhep/mescob11/sct-ctapipe-cleaning-analysis_dev/ctapipe_ouput/               
-n_cores=12
-merge_h5_files=True
-
+# Include trailing / 
+# Will create output directory if it does not exist
+input_dir /your-directory-with-simulation-files/
+output_dir /where-you-want-your-output/
+n_cores CORES-IN-MACHINE
 # Start reading from here.
 
 
 # ctapipe parameters
-# User information
-YourName Miguel-Escobar                     # Seperate names with a dash ie Maria-Smith
-YourEmail mescob11@ucsc.edu
-YourInstitution UCSC
+# User information stored and written to provenance -> Doesn't seem to be working.
+YourName YOUR-NAME-HERE                     # Seperate names with a dash
+YourEmail YOUREMAIL@EXAMPLE.ORG
+YourInstitution YOUR-ORGANIZATION
 
 
-# ctapipe I/O parameters
-FocalLengthChoice 'EQUIVALENT'              # Need to specify this flag for prod3b
+# ctapipe-procecss I/O parameters
+OverWriteExistingFile True
+WriteDL1Images False
+WriteDL1Parameters True
+WriteDL2StereoReco True
+WriteRawWaveforms False
+WriteCalibratedWaveforms False
+WriteMuonParameters False                   # Haven't tried to use this nor do I know if it is implemented yet
+FocalLengthChoice 'EQUIVALENT'              # Need to specify this flag for prod3b                    
 
-# Level of information included in logs 
+# Level of information included in ctapipe-process logs 
 # Choices: any of [0, 10, 20, 30, 40, 50, 'DEBUG', 'INFO', 'WARN', 'ERROR', 'CRITICAL']
 LogFileLevel 'INFO' 
 LogLevel 30
 
-# Charge extraction - keep '' in name
+# ctapipe-merger parameters
+MergeH5Files False
+OverWriteExistingMergerFile True
+SkipBrokenFiles True                        # When merging, if there is a broken file it won't include it in merger
+Merge_Log_File_Level 'INFO'
+Merge_Log_Level 30
+AppendtoExistingFile False                  # If true, the ``output_path`` is appended to    
+IncludeDL1Images True
+IncludeDL1Muon True
+IncludeHillasParams True
+IncludeDL2SubarrayEventWiseData True
+IncludeDl2TelescopeEventWiseData True
+IncludeMonitoringData True
+IncludeProcessingStatistics True
+IncludeDatawithSimulationOnly True
+IncludeTelescopeWiseData True
+IncludeTrueImages True
+IncludeTrueParameters True
+
+
+# Charge extraction
 #'FullWaveformSum', 'FixedWindowSum', 
 #'GlobalPeakWindowSum','LocalPeakWindowSum', 
 #'SlidingWindowMaxSum', 'NeighborPeakWindowSum',
 #'TwoPassWindowSum', 'BaselineSubtractedNeighborPeakWindowSum'
-ChargeExtraction 'NeighborPeakWindowSum'
+ChargeExtraction NeighborPeakWindowSum
 
 
 # Image cleaner selects pixels which have signal in them and rejects those without
 UseTelescopeFrame True
-TelescopeType SCT
+TelescopeType MST*SCTCam
 # Cleaning algorithm choices are: 
 # TailcutsImageCleaner, MARSImageCleaner, FACTImageCleaner
-CleaningMethod FACTImageCleaner
+CleaningMethod TailcutsImageCleaner
 image_pe 2.5
 neighbor_pe 1.5
 delta_time 5.0
 
-# Reconstructor - NOT YET IMPLEMENTED
+# Stereo geometry reconstructor or method to go from DL1 to DL2a (reconstructed shower geometry)
+# Have only tested HillasReconstructor and HillasIntersection 
+# Other methods might require a few extra parameters which I haven't explored
 # 'DispReconstructor', 'HillasIntersection', 
 # 'HillasReconstructor', 'EnergyRegressor', 
 # 'ParticleClassifier'
+StereoGeometryReconstructor HillasReconstructor
 
-
-# Image Quality Criteria                      
-KeepIsolatedPixels False                    # If False, pixels with < min_pic_neighbors are removed.
-MinimumPictureNeighbors 1                   # Minimum number of neighbor pixels above neighbor pe cut to consider.
-MinimumPixelsInImage 3                      # Minimum # of pixels in image required to be considered for analysis.
-MinimumImageSize 3                          # Minimum total charge [pe] in image required to be considered for analysis.
+# Stereo quality criteria - images with Hillas parameters satisfying quality criteria stated here are used
+# Don't know the ideal parameters for these cuts
+HillasSize 5                                # Hillas size greater than this value
+HillasWidth 0                               # Hillas width greater than this value
+HillasMininumPixelsInImage 3                # Minimum # of pixels in image required to be considered for analysis
+HillasDistance 4.5                          # Hillas distance less than this quantity in degrees
