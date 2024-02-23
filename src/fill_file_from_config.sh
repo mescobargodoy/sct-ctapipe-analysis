@@ -2,7 +2,8 @@
 
 # Check if correct number of arguments are provided
 if [ $# -ne 3 ]; then
-    echo "Usage: $0 <input_file> <replacement_file> <output_file>"
+    echo "Usage: $0 <input_file> <config_file> <output_file>"
+    echo "Script reads <input_file>, replaces words in <input_file> that are specified in <config_file> and writes file with replacements to <output_file>."
     exit 1
 fi
 
@@ -24,16 +25,9 @@ fi
 
 # Process replacement file and store replacements in associative array
 declare -A replacements
-start_reading=false
 while IFS= read -r line || [ -n "$line" ]; do
-    # Start reading from the line after the comment "# Start reading from here"
-    if [[ "$line" =~ ^\#.*Start\ reading\ from\ here ]]; then
-        start_reading=true
-        continue
-    fi
-
-    # Ignore commented lines, empty lines, and lines before the start comment
-    if [ "$start_reading" = true ] && [ -n "$line" ] && [[ ! "$line" =~ ^\# ]]; then
+    # Ignore commented lines, empty lines
+    if [ -n "$line" ] && [[ ! "$line" =~ ^\# ]]; then
         old_word=$(echo "$line" | awk '{print $1}')
         new_word=$(echo "$line" | awk '{print $2}')
         replacements["$old_word"]="$new_word"

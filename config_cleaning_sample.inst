@@ -4,7 +4,6 @@
 input_dir /your-directory-with-simulation-files/
 output_dir /where-you-want-your-output/
 n_cores CORES-IN-MACHINE
-# Start reading from here.
 
 
 # ctapipe parameters
@@ -24,10 +23,12 @@ WriteCalibratedWaveforms False
 WriteMuonParameters False                   # Haven't tried to use this nor do I know if it is implemented yet
 FocalLengthChoice 'EQUIVALENT'              # Need to specify this flag for prod3b                    
 
+
 # Level of information included in ctapipe-process logs 
 # Choices: any of [0, 10, 20, 30, 40, 50, 'DEBUG', 'INFO', 'WARN', 'ERROR', 'CRITICAL']
 LogFileLevel 'INFO' 
 LogLevel 30
+
 
 # ctapipe-merger parameters
 MergeH5Files False
@@ -67,6 +68,7 @@ image_pe 2.5
 neighbor_pe 1.5
 delta_time 5.0
 
+
 # Stereo geometry reconstructor or method to go from DL1 to DL2a (reconstructed shower geometry)
 # Have only tested HillasReconstructor and HillasIntersection 
 # Other methods might require a few extra parameters which I haven't explored
@@ -74,6 +76,7 @@ delta_time 5.0
 # 'HillasReconstructor', 'EnergyRegressor', 
 # 'ParticleClassifier'
 StereoGeometryReconstructor HillasReconstructor
+
 
 # Stereo quality criteria - images with Hillas parameters satisfying quality criteria stated here are used
 # Don't know the ideal parameters for these cuts

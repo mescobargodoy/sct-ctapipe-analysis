@@ -4,7 +4,6 @@
 input_dir /your-directory-with-simulation-files/
 output_dir /where-you-want-your-output/
 n_cores CORES-IN-MACHINE
-# Start reading from here.
 
 
 # ctapipe parameters
@@ -24,10 +23,12 @@ WriteCalibratedWaveforms False
 WriteMuonParameters False
 FocalLengthChoice 'EQUIVALENT'              # Need to specify this flag for prod3b
 
+
 # Level of information included in logs 
 # Choices: any of [0, 10, 20, 30, 40, 50, 'DEBUG', 'INFO', 'WARN', 'ERROR', 'CRITICAL']
 LogFileLevel 'INFO' 
 LogLevel 30
+
 
 # ctapipe-merger parameters
 MergeH5Files True
@@ -47,6 +48,7 @@ IncludeDatawithSimulationOnly True
 IncludeTelescopeWiseData True
 IncludeTrueImages True
 IncludeTrueParameters True
+
 
 # Charge extraction
 #'FullWaveformSum', 'FixedWindowSum', 
@@ -69,6 +71,7 @@ KeepIsolatedPixels False                    # If False, pixels with < min_pic_ne
 MinimumPictureNeighbors 1                   # Minimum number of neighbor pixels above neighbor pe cut to consider.
 MinimumPixelsInImage 3                      # Minimum # of pixels in image required to be considered for analysis.
 MinimumImageSize 3                          # Minimum total charge [pe] in image required to be considered for analysis. 
+
 
 # Stereo geometry reconstructor or method to go from DL1 to DL2a (reconstructed shower geometry)
 # Only tested HillasReconstructor and HillasIntersection 
