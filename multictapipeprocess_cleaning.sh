@@ -10,15 +10,11 @@ fi
 #############################################################################################################################
 
 ctapipe_process_config_file="$1"
-# input_dir=$(grep 'input_dir=' "$ctapipe_process_config_file" | cut -d'=' -f2 | tr -d ' ')
-# output_dir=$(grep 'output_dir=' "$ctapipe_process_config_file" | cut -d'=' -f2 | tr -d ' ')
-# n_cores=$(grep 'n_cores=' "$ctapipe_process_config_file" | cut -d'=' -f2)
-# merge_h5_files=$(grep 'merge_h5_files=' "$ctapipe_process_config_file" | cut -d'=' -f2)
-input_dir=$(./src/word_finder.sh "$ctapipe_process_config_file" 'input_dir')
-output_dir=$(./src/word_finder.sh "$ctapipe_process_config_file" 'output_dir')
-n_cores=$(./src/word_finder.sh "$ctapipe_process_config_file" 'n_cores')
-merge_h5_files=$(./src/word_finder.sh "$ctapipe_process_config_file" 'MergeH5Files')
-cleaning_algorithm=$(./src/word_finder.sh "$ctapipe_process_config_file" 'CleaningMethod')
+input_dir=$($SCTCTAPIPEANALYSISDIR/src/word_finder.sh "$ctapipe_process_config_file" 'input_dir')
+output_dir=$($SCTCTAPIPEANALYSISDIR/src/word_finder.sh "$ctapipe_process_config_file" 'output_dir')
+n_cores=$($SCTCTAPIPEANALYSISDIR/src/word_finder.sh "$ctapipe_process_config_file" 'n_cores')
+merge_h5_files=$($SCTCTAPIPEANALYSISDIR/src/word_finder.sh "$ctapipe_process_config_file" 'MergeH5Files')
+cleaning_algorithm=$($SCTCTAPIPEANALYSISDIR/src/word_finder.sh "$ctapipe_process_config_file" 'CleaningMethod')
 
 ctapipe_process_cleaning_config="$2"
 source "$ctapipe_process_cleaning_config"
@@ -46,12 +42,12 @@ fi
 
 # Default skeleton script
 if [ "$cleaning_algorithm" = "TailcutsImageCleaner" ] || [ "$cleaning_algorithm" = "MARSImageCleaner" ]; then
-    skeleton_configfile='yaml_files/charge_cuts_only_config_skelly.yaml'
+    skeleton_configfile="$SCTCTAPIPEANALYSISDIR/yaml_files/charge_cuts_only_config_skelly.yaml"
 elif [ "$cleaning_algorithm" = "FACTImageCleaner" ]; then
-    skeleton_configfile='yaml_files/charge_cuts_and_timing_config_skelly.yaml'
+    skeleton_configfile="$SCTCTAPIPEANALYSISDIR/yaml_files/charge_cuts_and_timing_config_skelly.yaml"
     cleaning_name='FACT'
 else 
-    skeleton_config_file='yaml_files/charge_cuts_only_config_skelly.yaml'
+    skeleton_config_file="$SCTCTAPIPEANALYSISDIR/yaml_files/charge_cuts_only_config_skelly.yaml"
     cleaning_name='2pass'
 fi
 
@@ -73,10 +69,10 @@ for ((i = 0; i < ${#image_pe_values[@]}; i++)); do
     # Create temporary directory
     mkdir -p temp
     # Bash script to generate temporary config files
-    ./src/ctapipe_config_skelly.sh "$skeleton_configfile" 'temp/temp_2_config.yaml' 'CleaningMethod' "$cleaning_algorithm" 'image_pe' "$first_pass" 'neighbor_pe' "$second_pass" 'delta_time' "$time_lim"
-    ./src/fill_file_from_config.sh 'temp/temp_2_config.yaml' "$ctapipe_process_config_file" 'temp/temp_config.yaml' 
+    $SCTCTAPIPEANALYSISDIR/src/ctapipe_config_skelly.sh "$skeleton_configfile" 'temp/temp_2_config.yaml' 'CleaningMethod' "$cleaning_algorithm" 'image_pe' "$first_pass" 'neighbor_pe' "$second_pass" 'delta_time' "$time_lim"
+    $SCTCTAPIPEANALYSISDIR/src/fill_file_from_config.sh 'temp/temp_2_config.yaml' "$ctapipe_process_config_file" 'temp/temp_config.yaml' 
     rm 'temp/temp_2_config.yaml' 
-    ./src/fill_file_from_config.sh "yaml_files/merger_config.yaml" "$ctapipe_process_config_file" 'temp/temp_merger_config.yaml' 
+    $SCTCTAPIPEANALYSISDIR/src/fill_file_from_config.sh "$SCTCTAPIPEANALYSISDIR/yaml_files/merger_config.yaml" "$ctapipe_process_config_file" 'temp/temp_merger_config.yaml' 
     merger_config_file='temp/temp_merger_config.yaml'
 
     # Create logs and provenance directories
@@ -89,9 +85,9 @@ for ((i = 0; i < ${#image_pe_values[@]}; i++)); do
     
     # Append the cleaning parameters used to .h5 output file.
     if [ "$cleaning_algorithm" = "TailcutsImageCleaner" ] || [ "$cleaning_algorithm" = "MARSImageCleaner" ]; then
-        cleaningparams=$(./src/cleaning_params.sh "$cleaning_name" "$first_pass" "$second_pass")
+        cleaningparams=$($SCTCTAPIPEANALYSISDIR/src/cleaning_params.sh "$cleaning_name" "$first_pass" "$second_pass")
     elif [ "$cleaning_algorithm" = "FACTImageCleaner" ]; then
-        cleaningparams=$(./src/cleaning_params.sh "$cleaning_name" "$first_pass" "$second_pass" "$time_lim")
+        cleaningparams=$($SCTCTAPIPEANALYSISDIR/src/cleaning_params.sh "$cleaning_name" "$first_pass" "$second_pass" "$time_lim")
     fi
     
     # Starting ctapipe-process section
@@ -101,10 +97,10 @@ for ((i = 0; i < ${#image_pe_values[@]}; i++)); do
     for file in "${simtel_files[@]}"; do
     # Temp file naming
         filename_end="dl2_$cleaningparams.h5"
-        name=$(./src/name_output_file.sh "$file" "$filename_end" ".simtel.gz")
+        name=$($SCTCTAPIPEANALYSISDIR/src/name_output_file.sh "$file" "$filename_end" ".simtel.gz")
     # Log and provenance file naming
-        log_=$(./src/name_output_file.sh "$file" "$cleaningparams.log" ".simtel.gz")
-        prov_=$(./src/name_output_file.sh "$file" "$cleaningparams.prov" ".simtel.gz")
+        log_=$($SCTCTAPIPEANALYSISDIR/src/name_output_file.sh "$file" "$cleaningparams.log" ".simtel.gz")
+        prov_=$($SCTCTAPIPEANALYSISDIR/src/name_output_file.sh "$file" "$cleaningparams.prov" ".simtel.gz")
         log="$output_process_logs_dir$log_"
         prov="$provenance_process_dir$prov_"
 
@@ -143,13 +139,13 @@ for ((i = 0; i < ${#image_pe_values[@]}; i++)); do
         mkdir -p "$provenance_mergers_dir"
         # Naming merged file
         merged_temp_name="${simtel_files[${#simtel_files[@]}-1]}"
-        output_merged_file_=$(./src/name_output_file.sh "$merged_temp_name" "merged_$filename_end" ".simtel.gz") 
+        output_merged_file_=$($SCTCTAPIPEANALYSISDIR/src/name_output_file.sh "$merged_temp_name" "merged_$filename_end" ".simtel.gz") 
         output_merged_file=$(echo "$output_merged_file_" | sed 's/run[0-9]*//')
         output_merged_file="$output_dir$output_merged_file"
         echo "Files getting merged into: $output_merged_file"
         # Naming merger logs and provenance files
-        merged_log_=$(./src/name_output_file.sh "$output_merged_file" "log" ".h5")
-        merged_prov_=$(./src/name_output_file.sh "$output_merged_file" "prov" ".h5")
+        merged_log_=$($SCTCTAPIPEANALYSISDIR/src/name_output_file.sh "$output_merged_file" "log" ".h5")
+        merged_prov_=$($SCTCTAPIPEANALYSISDIR/src/name_output_file.sh "$output_merged_file" "prov" ".h5")
         merged_log="$output_mergers_logs_dir$merged_log_"
         merged_prov="$provenance_mergers_dir$merged_prov_"
 
