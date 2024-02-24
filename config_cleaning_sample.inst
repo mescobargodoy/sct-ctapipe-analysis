@@ -8,7 +8,7 @@ n_cores CORES-IN-MACHINE
 
 # ctapipe parameters
 # User information stored and written to provenance -> Doesn't seem to be working.
-YourName YOUR-NAME-HERE                     # Seperate names with a dash
+YourName YOUR-NAME-HERE                     
 YourEmail YOUREMAIL@EXAMPLE.ORG
 YourInstitution YOUR-ORGANIZATION
 
@@ -20,8 +20,8 @@ WriteDL1Parameters True
 WriteDL2StereoReco True
 WriteRawWaveforms False
 WriteCalibratedWaveforms False
-WriteMuonParameters False                   # Haven't tried to use this nor do I know if it is implemented yet
-FocalLengthChoice 'EQUIVALENT'              # Need to specify this flag for prod3b                    
+WriteMuonParameters False                   
+FocalLengthChoice 'EQUIVALENT'                    
 
 
 # Level of information included in ctapipe-process logs 
@@ -33,10 +33,10 @@ LogLevel 30
 # ctapipe-merger parameters
 MergeH5Files False
 OverWriteExistingMergerFile True
-SkipBrokenFiles True                        # When merging, if there is a broken file it won't include it in merger
+SkipBrokenFiles True                        
 Merge_Log_File_Level 'INFO'
 Merge_Log_Level 30
-AppendtoExistingFile False                  # If true, the ``output_path`` is appended to    
+AppendtoExistingFile False                     
 IncludeDL1Images True
 IncludeDL1Muon True
 IncludeHillasParams True
@@ -51,16 +51,14 @@ IncludeTrueParameters True
 
 
 # Charge extraction
-#'FullWaveformSum', 'FixedWindowSum', 
-#'GlobalPeakWindowSum','LocalPeakWindowSum', 
-#'SlidingWindowMaxSum', 'NeighborPeakWindowSum',
-#'TwoPassWindowSum', 'BaselineSubtractedNeighborPeakWindowSum'
 ChargeExtraction NeighborPeakWindowSum
+
+# Telescope options
+UseTelescopeFrame True
+TelescopeType MST*SCTCam
 
 
 # Image cleaner selects pixels which have signal in them and rejects those without
-UseTelescopeFrame True
-TelescopeType MST*SCTCam
 # Cleaning algorithm choices are: 
 # TailcutsImageCleaner, MARSImageCleaner, FACTImageCleaner
 CleaningMethod TailcutsImageCleaner
@@ -70,17 +68,12 @@ delta_time 5.0
 
 
 # Stereo geometry reconstructor or method to go from DL1 to DL2a (reconstructed shower geometry)
-# Have only tested HillasReconstructor and HillasIntersection 
-# Other methods might require a few extra parameters which I haven't explored
-# 'DispReconstructor', 'HillasIntersection', 
-# 'HillasReconstructor', 'EnergyRegressor', 
-# 'ParticleClassifier'
 StereoGeometryReconstructor HillasReconstructor
 
 
 # Stereo quality criteria - images with Hillas parameters satisfying quality criteria stated here are used
 # Don't know the ideal parameters for these cuts
-HillasSize 5                                # Hillas size greater than this value
-HillasWidth 0                               # Hillas width greater than this value
-HillasMininumPixelsInImage 3                # Minimum # of pixels in image required to be considered for analysis
-HillasDistance 4.5                          # Hillas distance less than this quantity in degrees
+HillasSize 5                                
+HillasWidth 0                               
+HillasMininumPixelsInImage 3                
+HillasDistance 4.5                          

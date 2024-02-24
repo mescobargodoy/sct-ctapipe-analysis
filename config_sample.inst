@@ -8,7 +8,7 @@ n_cores CORES-IN-MACHINE
 
 # ctapipe parameters
 # User information stored and written to provenance -> Doesn't seem to be working.
-YourName YOUR-NAME-HERE                     # Seperate names with a dash
+YourName YOUR-NAME-HERE             
 YourEmail YOUREMAIL@EXAMPLE.ORG
 YourInstitution YOUR-ORGANIZATION
 
@@ -21,7 +21,7 @@ WriteDL2StereoReco True
 WriteRawWaveforms False
 WriteCalibratedWaveforms False
 WriteMuonParameters False
-FocalLengthChoice 'EQUIVALENT'              # Need to specify this flag for prod3b
+FocalLengthChoice 'EQUIVALENT'              # Need 'EQUIVALENT' for this flag for prod3b
 
 
 # Level of information included in logs 
@@ -33,10 +33,10 @@ LogLevel 30
 # ctapipe-merger parameters
 MergeH5Files True
 OverWriteExistingMergerFile True
-SkipBrokenFiles True                        # When merging, if there is a broken file it won't include it in merger -> requires merge_h5_files=True
+SkipBrokenFiles True                        
 Merge_Log_File_Level 'INFO'
 Merge_Log_Level 30
-AppendtoExistingFile False                  # If true, the ``output_path`` is appended to    
+AppendtoExistingFile False                     
 IncludeDL1Images True
 IncludeDL1Muon True
 IncludeHillasParams True
@@ -51,26 +51,25 @@ IncludeTrueParameters True
 
 
 # Charge extraction
-#'FullWaveformSum', 'FixedWindowSum', 
-#'GlobalPeakWindowSum','LocalPeakWindowSum', 
-#'SlidingWindowMaxSum', 'NeighborPeakWindowSum',
-#'TwoPassWindowSum', 'BaselineSubtractedNeighborPeakWindowSum'
 ChargeExtraction NeighborPeakWindowSum
 
 
-# Image cleaner selects pixels which have signal in them and rejects those without
+# Telescope options
 UseTelescopeFrame True
 TelescopeType MST*SCTCam
+
+
+# Image cleaner selects pixels which have signal in them and rejects those without
 # Cleaning algorithm choices are: 
 # TailcutsImageCleaner, MARSImageCleaner, FACTImageCleaner
 CleaningMethod FACTImageCleaner
 
 
 # Image Quality Criteria                      
-KeepIsolatedPixels False                    # If False, pixels with < min_pic_neighbors are removed.
-MinimumPictureNeighbors 1                   # Minimum number of neighbor pixels above neighbor pe cut to consider.
-MinimumPixelsInImage 3                      # Minimum # of pixels in image required to be considered for analysis.
-MinimumImageSize 3                          # Minimum total charge [pe] in image required to be considered for analysis. 
+KeepIsolatedPixels False                    
+MinimumPictureNeighbors 1                   
+MinimumPixelsInImage 3                     
+MinimumImageSize 3                           
 
 
 # Stereo geometry reconstructor or method to go from DL1 to DL2a (reconstructed shower geometry)
@@ -80,7 +79,7 @@ StereoGeometryReconstructor HillasReconstructor
 
 # Stereo quality criteria - images with Hillas parameters satisfying quality criteria stated here are used
 # Not implemented - do not know ideal parameters
-HillasSize 5                                # Hillas size greater than this value
-HillasWidth 0                               # Hillas width greater than this value
-HillasMininumPixelsInImage 3                # Minimum # of pixels in image required to be considered for analysis
-HillasDistance 4.5                          # Hillas distance less than this quantity in degrees
+HillasSize 5                                
+HillasWidth 0                               
+HillasMininumPixelsInImage 3                
+HillasDistance 4.5                          
