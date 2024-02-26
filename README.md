@@ -37,7 +37,36 @@ export PATH=$PATH:$SCTCTAPIPEANALYSISDIR
 ```
 and then source bashrc or bash_profile. You should be able to execute the scripts from anywhere now.
 
-Then set up the configuration file. For a more verbose description of the parameters read CONFIGREADME.md.
+### ctapipeprocess.sh
+For more experienced *ctapipe* users, you can use the *ctapipeprocess.sh* script.
+However here you need to provide the configuration file(s) that follow the specific *ctapipe* format. *sample.yaml* is an example of a configuration file that you can use. 
+As long as the configuration file follows the *ctapipe* format and has *ctapipe* specific variables, it should work. The rest of the parameters that *ctapipeprocess.sh* takes have the same meaning as in the other confifuration files for the other scripts.
+
+I recommend to use this since it is able to take any *ctapipe* parameter. In addition it works for simulation arrays of different telescope types. Plus you can get a feel for the things you can do.
+
+The inputs are as follows:
+
+```bash
+ctapipeprocess.sh <input_dir> <output_dir> <n_cores> <config_file_1> <config_file_2> <config_file_3> ... <config_file_N>"
+```
+
+Note the data products for this one follow a different naming convention than the one specified below. If your file is
+```bash
+/input_dir/gamma_20deg_0deg_run838___cta-prod3-sct_desert-2150m-Paranal-SCT.simtel.gz
+```
+then the outputs will be
+```bash
+/output_dir/gamma_20deg_0deg_run838___cta-prod3-sct_desert-2150m-Paranal-SCT.h5
+/outputdirectory/logs/process/gamma_20deg_0deg_run838___cta-prod3-sct_desert-2150m-Paranal-SCT.log
+/outputdirectory/provenance/process/gamma_20deg_0deg_run838___cta-prod3-sct_desert-2150m-Paranal-SCT.prov
+```
+
+There is no option for merging but you can use *ctapipe-merge*. 
+
+
+### multictapipeprocess.sh
+
+Set up the configuration file. For a more verbose description of the parameters read CONFIGREADME.md.
 
 The file *config_sample.inst* contains most of the options specified but the user will need to specify the input directory with the simulation files, output directory for data products, number of cores in your machine, and user information. 
 
@@ -54,7 +83,7 @@ There will be three products written to the output directory. The products are l
 Provenance "tracks both input and output files, as well as details of the machine and software environment on which a Tool executed".
 
 
-## Variation of cleaning parameters
+### *multictapipeprocess_cleaning.sh*
 There is an additional script *multictapipeprocess_cleaning.sh* that allows you to submit multiple ctapipe-process jobs with different cleaning parameters. All the other parameters remain fixed. Sample configuration files are provided: *config_cleaning_sample.inst* and 
 *cleaning_params_sample.inst*.
 
@@ -77,7 +106,7 @@ The *image_pe*, *neighbor_pe* and *delta_t* values are no longer an option in *c
 
 ## Output structure
 The output files will have a naming convention based on the cleaning method and cleaning parameters as used as well as the file type.
-For a given simulation file, say *myfile.simtelgz* the output files will follow the structure below:
+For a given simulation file, say *input_dir/myfile.simtelgz* the output files will follow the structure below:
 ```bash
 /outputdirectory/myfile_cleaningmethod_chargecut1_chargecut2_timecut.h5
 /outputdirectory/logs/process/myfile_cleaningmethod_chargecut1_chargecut2_timecut.log
@@ -86,8 +115,8 @@ For a given simulation file, say *myfile.simtelgz* the output files will follow 
 
 For a more concrete example, if your input directory has the following files
 ```bash
-gamma_20deg_0deg_run838___cta-prod3-sct_desert-2150m-Paranal-SCT.simtel.gz
-gamma_20deg_0deg_run868___cta-prod3-sct_desert-2150m-Paranal-SCT.simtel.gz
+/input_dir/gamma_20deg_0deg_run838___cta-prod3-sct_desert-2150m-Paranal-SCT.simtel.gz
+/input_dir/gamma_20deg_0deg_run868___cta-prod3-sct_desert-2150m-Paranal-SCT.simtel.gz
 ```
  and you decide to use the FACTImageCleaner (charge and time cuts) with values 2.5 pe, 1.5 pe, 1.0 ns as cleaning parameters, the output will be (assuming no merging of files):
  ```bash
@@ -114,7 +143,7 @@ If you decided to merge these two files into a single one the outputs would look
 ```
 
 # Extra comments
-I haven't tested these scripts extensively nor are all ctapipe options included here. Mainly reaching DL3 data products is not implemented nor processing of h5 files. In addition, user specified configuration file is based on my own definition of variables not the ones defined in ctapipe. I tried to use a descriptive naming convention that resembles ctapipe parameter names. Feel free to raise any issues, comments, suggestions or questions. Many things can be improved and extra things can be added.
+I haven't tested these scripts extensively nor are all ctapipe options included here. I encourage the usage of *ctapieprocess.sh* to stay within *ctapipe* existing definitions. Reaching DL3 data products is not implemented nor processing of h5 files for *multictapipeprocess.sh* and *multictapipeprocess_cleaning.sh*. In addition, user specified configuration file is based on my own definition of variables not the ones defined in ctapipe. I tried to use a descriptive naming convention that resembles ctapipe parameter names. Feel free to raise any issues, comments, suggestions or questions. Many things can be improved and extra things can be added.
 
 # Contact
 Miguel Escobar Godoy
