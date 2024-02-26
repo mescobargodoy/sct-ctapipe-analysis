@@ -47,10 +47,10 @@ I recommend to use this since it is able to take any *ctapipe* parameter. In add
 The inputs are as follows:
 
 ```bash
-ctapipeprocess.sh <input_dir> <output_dir> <n_cores> <config_file_1> <config_file_2> <config_file_3> ... <config_file_N>"
+ctapipeprocess.sh <input_dir> <output_dir> <n_cores> <config_file_1> <config_file_2> <config_file_3> ... <config_file_N>
 ```
 
-Note the data products for this one follow a different naming convention than the one specified below. If your file is
+Note the data products for this one follow a different naming convention than the one specified later. If your file is
 ```bash
 /input_dir/gamma_20deg_0deg_run838___cta-prod3-sct_desert-2150m-Paranal-SCT.simtel.gz
 ```
@@ -83,7 +83,7 @@ There will be three products written to the output directory. The products are l
 Provenance "tracks both input and output files, as well as details of the machine and software environment on which a Tool executed".
 
 
-### *multictapipeprocess_cleaning.sh*
+### multictapipeprocess_cleaning.sh
 There is an additional script *multictapipeprocess_cleaning.sh* that allows you to submit multiple ctapipe-process jobs with different cleaning parameters. All the other parameters remain fixed. Sample configuration files are provided: *config_cleaning_sample.inst* and 
 *cleaning_params_sample.inst*.
 
