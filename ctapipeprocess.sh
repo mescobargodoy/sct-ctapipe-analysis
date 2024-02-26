@@ -62,7 +62,7 @@ for file in "${simtel_files[@]}"; do
     output_file="$output_dir$name"
     
     # Submitting ctapipe-process jobs
-    ctapipe-process --input "$file" --o "$output_file" --l "$log" --provenance-log="$prov" --config "$config_file_1" "${config_params[@]}" --progress &
+    ctapipe-process --config "$config_file_1" "${config_params[@]}" --input "$file" --o "$output_file" --l "$log" --provenance-log="$prov" --progress &
     cores_used=$((cores_used + 1))
     echo "$cores_used file(s) being processed."
 
