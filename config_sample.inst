@@ -62,8 +62,10 @@ TelescopeType MST*SCTCam
 # Image cleaner selects pixels which have signal in them and rejects those without
 # Cleaning algorithm choices are: 
 # TailcutsImageCleaner, MARSImageCleaner, FACTImageCleaner
-CleaningMethod FACTImageCleaner
-
+CleaningMethod TailcutsImageCleaner
+image_pe 3.5
+neighbor_pe 2.5
+delta_time 5.0
 
 # Image Quality Criteria                      
 KeepIsolatedPixels False                    

@@ -62,8 +62,8 @@ TelescopeType MST*SCTCam
 # Cleaning algorithm choices are: 
 # TailcutsImageCleaner, MARSImageCleaner, FACTImageCleaner
 CleaningMethod TailcutsImageCleaner
-image_pe 2.5
-neighbor_pe 1.5
+image_pe 3.5
+neighbor_pe 2.5
 delta_time 5.0
 
 
