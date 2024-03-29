@@ -62,10 +62,6 @@ TelescopeType MST*SCTCam
 # Cleaning algorithm choices are: 
 # TailcutsImageCleaner, MARSImageCleaner, FACTImageCleaner
 CleaningMethod TailcutsImageCleaner
-image_pe 3.5
-neighbor_pe 2.5
-delta_time 5.0
-
 
 # Stereo geometry reconstructor or method to go from DL1 to DL2a (reconstructed shower geometry)
 StereoGeometryReconstructor HillasReconstructor
